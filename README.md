@@ -178,6 +178,8 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 • 📦 Release APK generation  
 • 🎨 Complete UI/UX design
 
+APK link here:  [HERE](https://drive.google.com/file/d/1RrDcxFY3xTXpGNwWYeXCIgSBUqB6KMvD/view?usp=drive_link)
+
 
 ## 🙏 Acknowledgments
 
