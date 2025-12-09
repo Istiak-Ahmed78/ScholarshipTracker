@@ -18,7 +18,8 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.*
-
+import android.os.Looper
+import android.os.Handler
 class MainActivity : AppCompatActivity() {
 
     private lateinit var rvScholarships: RecyclerView
@@ -79,8 +80,21 @@ class MainActivity : AppCompatActivity() {
         btnSort.setOnClickListener { showSortDialog() }
 
         loadScholarships()
+        checkEditRequest()
     }
-
+    private fun checkEditRequest() {
+        val scholarshipId = intent.getStringExtra("EDIT_SCHOLARSHIP_ID")
+        if (scholarshipId != null) {
+            // Find the scholarship and open edit dialog
+            val scholarship = scholarshipManager.getScholarshipById(scholarshipId)
+            if (scholarship != null) {
+                // Small delay to ensure activity is fully loaded
+                Handler(Looper.getMainLooper()).postDelayed({
+                    showAddEditDialog(scholarship)
+                }, 300)
+            }
+        }
+    }
     private fun loadScholarships() {
         filterAndSortScholarships()
     }

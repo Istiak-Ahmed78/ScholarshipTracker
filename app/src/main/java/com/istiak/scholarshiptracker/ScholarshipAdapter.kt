@@ -90,20 +90,22 @@ class ScholarshipAdapter(
                 android.content.res.ColorStateList.valueOf(Color.parseColor("#F44336"))
         }
 
-        // Document chips
+        // Document chips - Show MISSING documents (RED)
         holder.chipGroupDocuments.removeAllViews()
-        prepared.take(3).forEach { docName ->
+        val missing = scholarship.getMissingDocuments()
+
+        missing.take(3).forEach { docName ->
             val chip = Chip(holder.itemView.context)
             chip.text = docName
-            chip.setChipBackgroundColorResource(android.R.color.holo_green_light)
+            chip.setChipBackgroundColorResource(android.R.color.holo_red_light)
             chip.setTextColor(Color.WHITE)
             chip.textSize = 10f
             holder.chipGroupDocuments.addView(chip)
         }
 
-        if (prepared.size > 3) {
+        if (missing.size > 3) {
             val moreChip = Chip(holder.itemView.context)
-            moreChip.text = "+${prepared.size - 3} more"
+            moreChip.text = "+${missing.size - 3} more"
             moreChip.setChipBackgroundColorResource(android.R.color.darker_gray)
             moreChip.setTextColor(Color.WHITE)
             moreChip.textSize = 10f
