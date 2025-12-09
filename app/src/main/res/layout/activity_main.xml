@@ -59,7 +59,7 @@
                 android:src="@android:drawable/ic_menu_search"
                 android:background="@drawable/round_button_background"
                 android:contentDescription="Filter"
-                android:tint="#1976D2"/>
+                app:tint="#1976D2"/>
 
             <ImageButton
                 android:id="@+id/btnSort"
@@ -68,7 +68,7 @@
                 android:src="@android:drawable/ic_menu_sort_by_size"
                 android:background="@drawable/round_button_background"
                 android:contentDescription="Sort"
-                android:tint="#1976D2"
+                app:tint="#1976D2"
                 android:layout_marginStart="4dp"/>
         </LinearLayout>
 
