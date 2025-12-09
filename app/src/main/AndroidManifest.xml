@@ -11,15 +11,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScholarshipTracker">
+
+        <!-- Main Activity (Launcher) -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.ScholarshipTracker">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Detail Activity -->
+        <activity
+            android:name=".ScholarshipDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ScholarshipTracker" />
+
     </application>
 
 </manifest>

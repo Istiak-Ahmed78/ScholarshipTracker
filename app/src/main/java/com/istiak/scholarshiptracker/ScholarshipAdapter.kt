@@ -1,130 +1,171 @@
 package com.istiak.scholarshiptracker
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import java.util.Date
 
 class ScholarshipAdapter(
-    private var items: MutableList<ScholarshipListItem>,
+    private var scholarships: MutableList<Scholarship>,
     private val onItemClick: (Scholarship) -> Unit,
     private val onEditClick: (Scholarship) -> Unit,
     private val onDeleteClick: (Scholarship) -> Unit
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    companion object {
-        private const val VIEW_TYPE_HEADER = 0
-        private const val VIEW_TYPE_SCHOLARSHIP = 1
-    }
-
-    class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvSectionTitle: TextView = view.findViewById(R.id.tvSectionTitle)
-        val tvCount: TextView = view.findViewById(R.id.tvCount)
-    }
+) : RecyclerView.Adapter<ScholarshipAdapter.ScholarshipViewHolder>() {
 
     class ScholarshipViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvName: TextView = view.findViewById(R.id.tvScholarshipName)
+        val cardView: CardView = view.findViewById(R.id.cardView)
+        val tvName: TextView = view.findViewById(R.id.tvName)
         val tvOrganization: TextView = view.findViewById(R.id.tvOrganization)
         val tvDeadline: TextView = view.findViewById(R.id.tvDeadline)
-        val tvFund: TextView = view.findViewById(R.id.tvFund)
         val tvStatus: TextView = view.findViewById(R.id.tvStatus)
+        val tvDegree: TextView = view.findViewById(R.id.tvDegree)
+        val tvLanguage: TextView = view.findViewById(R.id.tvLanguage)
+        val tvReachType: TextView = view.findViewById(R.id.tvReachType)
+        val tvFund: TextView = view.findViewById(R.id.tvFund)
+        val tvDocuments: TextView = view.findViewById(R.id.tvDocuments)
+        val progressBar: ProgressBar = view.findViewById(R.id.progressBar)
+        val chipGroupDocuments: ChipGroup = view.findViewById(R.id.chipGroupDocuments)
         val btnEdit: ImageButton = view.findViewById(R.id.btnEdit)
         val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
+        val layoutDeadlineWarning: LinearLayout = view.findViewById(R.id.layoutDeadlineWarning)
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is ScholarshipListItem.Header -> VIEW_TYPE_HEADER
-            is ScholarshipListItem.ScholarshipItem -> VIEW_TYPE_SCHOLARSHIP
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScholarshipViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_scholarship, parent, false)
+        return ScholarshipViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ScholarshipViewHolder, position: Int) {
+        val scholarship = scholarships[position]
+
+        holder.tvName.text = scholarship.name
+        holder.tvOrganization.text = scholarship.organization
+
+        // Display flexible deadline
+        holder.tvDeadline.text = scholarship.getDisplayDeadline()
+
+        // Display status with color
+        holder.tvStatus.text = scholarship.status
+        when (scholarship.status) {
+            "Not Applied" -> holder.tvStatus.setBackgroundResource(R.drawable.badge_status_not_applied)
+            "Applied" -> holder.tvStatus.setBackgroundResource(R.drawable.badge_status_applied)
+            "Accepted" -> holder.tvStatus.setBackgroundResource(R.drawable.badge_status_accepted)
+            "Rejected" -> holder.tvStatus.setBackgroundResource(R.drawable.badge_status_rejected)
         }
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            VIEW_TYPE_HEADER -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_section_header, parent, false)
-                HeaderViewHolder(view)
-            }
-            else -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_scholarship, parent, false)
-                ScholarshipViewHolder(view)
-            }
+        // Display multiple degree types
+        holder.tvDegree.text = scholarship.getDegreeTypesString()
+
+        holder.tvLanguage.text = scholarship.languageRequirement
+        holder.tvReachType.text = scholarship.applicationReachType
+
+        // Display financial summary
+        holder.tvFund.text = scholarship.getFinancialSummary()
+
+        // Document progress
+        val prepared = scholarship.getPreparedDocuments()
+        val total = scholarship.documentsRequired.size
+        val percentage = scholarship.getDocumentCompletionPercentage()
+
+        holder.tvDocuments.text = "${prepared.size}/$total Documents ($percentage%)"
+        holder.progressBar.progress = percentage
+
+        // Update progress bar color based on completion
+        when {
+            percentage == 100 -> holder.progressBar.progressTintList =
+                android.content.res.ColorStateList.valueOf(Color.parseColor("#4CAF50"))
+            percentage >= 50 -> holder.progressBar.progressTintList =
+                android.content.res.ColorStateList.valueOf(Color.parseColor("#FF9800"))
+            else -> holder.progressBar.progressTintList =
+                android.content.res.ColorStateList.valueOf(Color.parseColor("#F44336"))
         }
-    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (val item = items[position]) {
-            is ScholarshipListItem.Header -> {
-                val headerHolder = holder as HeaderViewHolder
-                headerHolder.tvSectionTitle.text = item.title
-                headerHolder.tvCount.text = "${item.count}"
-            }
-            is ScholarshipListItem.ScholarshipItem -> {
-                val scholarshipHolder = holder as ScholarshipViewHolder
-                val scholarship = item.scholarship
+        // Document chips
+        holder.chipGroupDocuments.removeAllViews()
+        prepared.take(3).forEach { docName ->
+            val chip = Chip(holder.itemView.context)
+            chip.text = docName
+            chip.setChipBackgroundColorResource(android.R.color.holo_green_light)
+            chip.setTextColor(Color.WHITE)
+            chip.textSize = 10f
+            holder.chipGroupDocuments.addView(chip)
+        }
 
-                scholarshipHolder.tvName.text = scholarship.name
-                scholarshipHolder.tvOrganization.text = scholarship.organization
-                scholarshipHolder.tvDeadline.text = if (scholarship.deadline.isEmpty()) {
-                    "No deadline set"
-                } else {
-                    "Deadline: ${scholarship.deadline}"
-                }
-                scholarshipHolder.tvFund.text = "Fund: ${scholarship.fundAmount}"
-                scholarshipHolder.tvStatus.text = scholarship.status
+        if (prepared.size > 3) {
+            val moreChip = Chip(holder.itemView.context)
+            moreChip.text = "+${prepared.size - 3} more"
+            moreChip.setChipBackgroundColorResource(android.R.color.darker_gray)
+            moreChip.setTextColor(Color.WHITE)
+            moreChip.textSize = 10f
+            holder.chipGroupDocuments.addView(moreChip)
+        }
 
-                // Set status color
-                when (scholarship.status) {
-                    "Not Applied" -> scholarshipHolder.tvStatus.setTextColor(
-                        scholarshipHolder.itemView.context.getColor(android.R.color.holo_orange_dark)
-                    )
-                    "Applied" -> scholarshipHolder.tvStatus.setTextColor(
-                        scholarshipHolder.itemView.context.getColor(android.R.color.holo_blue_dark)
-                    )
-                    "Accepted" -> scholarshipHolder.tvStatus.setTextColor(
-                        scholarshipHolder.itemView.context.getColor(android.R.color.holo_green_dark)
-                    )
-                    "Rejected" -> scholarshipHolder.tvStatus.setTextColor(
-                        scholarshipHolder.itemView.context.getColor(android.R.color.holo_red_dark)
-                    )
-                }
+        // Deadline warning (only for exact deadlines)
+        if (scholarship.deadlineType == "Exact") {
+            val deadlineDate = scholarship.getDeadlineDate()
+            if (deadlineDate != null) {
+                val today = Date()
+                val daysUntil = ((deadlineDate.time - today.time) / (1000 * 60 * 60 * 24)).toInt()
 
-                // Highlight urgent deadlines (within 7 days)
-                if (scholarship.deadline.isNotEmpty()) {
-                    val daysUntil = getDaysUntilDeadline(scholarship)
-                    if (daysUntil in 0..7) {
-                        scholarshipHolder.tvDeadline.setTextColor(
-                            scholarshipHolder.itemView.context.getColor(android.R.color.holo_red_dark)
-                        )
-                    } else {
-                        scholarshipHolder.tvDeadline.setTextColor(
-                            scholarshipHolder.itemView.context.getColor(android.R.color.black)
-                        )
+                when {
+                    daysUntil < 0 -> {
+                        holder.layoutDeadlineWarning.visibility = View.VISIBLE
+                        holder.layoutDeadlineWarning.setBackgroundColor(Color.parseColor("#757575"))
+                        holder.layoutDeadlineWarning.findViewById<TextView>(R.id.tvDeadlineWarning).text = "Expired"
+                    }
+                    daysUntil in 0..7 -> {
+                        holder.layoutDeadlineWarning.visibility = View.VISIBLE
+                        holder.layoutDeadlineWarning.setBackgroundColor(Color.parseColor("#F44336"))
+                        holder.layoutDeadlineWarning.findViewById<TextView>(R.id.tvDeadlineWarning).text =
+                            "⚠️ $daysUntil days left"
+                    }
+                    daysUntil in 8..30 -> {
+                        holder.layoutDeadlineWarning.visibility = View.VISIBLE
+                        holder.layoutDeadlineWarning.setBackgroundColor(Color.parseColor("#FF9800"))
+                        holder.layoutDeadlineWarning.findViewById<TextView>(R.id.tvDeadlineWarning).text =
+                            "$daysUntil days left"
+                    }
+                    else -> {
+                        holder.layoutDeadlineWarning.visibility = View.GONE
                     }
                 }
-
-                scholarshipHolder.itemView.setOnClickListener { onItemClick(scholarship) }
-                scholarshipHolder.btnEdit.setOnClickListener { onEditClick(scholarship) }
-                scholarshipHolder.btnDelete.setOnClickListener { onDeleteClick(scholarship) }
+            } else {
+                holder.layoutDeadlineWarning.visibility = View.GONE
             }
+        } else {
+            // For non-exact deadlines, don't show warning
+            holder.layoutDeadlineWarning.visibility = View.GONE
+        }
+
+        // Click listeners
+        holder.cardView.setOnClickListener {
+            onItemClick(scholarship)
+        }
+
+        holder.btnEdit.setOnClickListener {
+            onEditClick(scholarship)
+        }
+
+        holder.btnDelete.setOnClickListener {
+            onDeleteClick(scholarship)
         }
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = scholarships.size
 
-    fun updateData(newItems: MutableList<ScholarshipListItem>) {
-        items = newItems
+    fun updateScholarships(newScholarships: List<Scholarship>) {
+        scholarships.clear()
+        scholarships.addAll(newScholarships)
         notifyDataSetChanged()
-    }
-
-    private fun getDaysUntilDeadline(scholarship: Scholarship): Int {
-        val deadlineDate = scholarship.getDeadlineDate() ?: return -1
-        val today = java.util.Calendar.getInstance()
-        val diffInMillis = deadlineDate.time - today.timeInMillis
-        return (diffInMillis / (1000 * 60 * 60 * 24)).toInt()
     }
 }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView 
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:padding="16dp">
 
     <LinearLayout
@@ -10,12 +9,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Name -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Scholarship Name *"
             android:layout_marginBottom="8dp">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etName"
                 android:layout_width="match_parent"
@@ -23,12 +22,12 @@
                 android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Organization -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Organization *"
             android:layout_marginBottom="8dp">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etOrganization"
                 android:layout_width="match_parent"
@@ -36,40 +35,213 @@
                 android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <!-- Status -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Application Status"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"/>
+        <Spinner
+            android:id="@+id/spinnerStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Deadline"
-            android:layout_marginBottom="8dp">
+            android:layout_marginBottom="8dp"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDeadline"
+        <!-- DEADLINE SECTION -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📅 Deadline Information"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1A237E"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Deadline Type Selector -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deadline Type"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerDeadlineType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Exact Date Field (shown when type = Exact) -->
+        <LinearLayout
+            android:id="@+id/layoutExactDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:focusable="false"
-                android:clickable="true"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="Exact Deadline (DD/MM/YYYY)"
+                android:layout_marginBottom="8dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etDeadline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="date"
+                    android:focusable="false"
+                    android:clickable="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
+        <!-- Month Field (shown when type = Month) -->
+        <LinearLayout
+            android:id="@+id/layoutMonthDeadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Month (e.g., January 2026, Early November 2025)"
+                android:layout_marginBottom="8dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etDeadlineMonth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Range Field (shown when type = Range) -->
+        <LinearLayout
+            android:id="@+id/layoutRangeDeadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Date Range (e.g., December-March, Oct 2025-Mar 2026)"
+                android:layout_marginBottom="8dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etDeadlineRange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <!-- Additional Notes Field -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Fund Amount"
+            android:hint="Deadline Notes (e.g., Varies by program, Opens in January)"
             android:layout_marginBottom="8dp">
-
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etFund"
+                android:id="@+id/etDeadlineNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- FINANCIAL INFORMATION SECTION -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💰 Financial Information"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1A237E"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Tuition Covered -->
+        <CheckBox
+            android:id="@+id/cbTuitionCovered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Full Tuition Covered"
+            android:textSize="14sp"/>
+
+        <!-- Monthly Stipend -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Living Costs Coverage"
+            android:hint="Monthly Stipend (e.g., €1,000-€1,400/month, ¥144,000/month)"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMonthlyStipend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Airfare Covered -->
+        <CheckBox
+            android:id="@+id/cbAirfareCovered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Airfare/Travel Costs Covered"
+            android:textSize="14sp"/>
+
+        <!-- Accommodation Covered -->
+        <CheckBox
+            android:id="@+id/cbAccommodationCovered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Accommodation/Housing Provided"
+            android:textSize="14sp"/>
+
+        <!-- Health Insurance -->
+        <CheckBox
+            android:id="@+id/cbHealthInsurance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Health Insurance Covered"
+            android:textSize="14sp"/>
+
+        <!-- Other Benefits -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Other Benefits (e.g., Visa fees, relocation costs, travel allowance)"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etOtherBenefits"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Living Costs (kept for backward compatibility) -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Living Costs Info (optional)"
+            android:layout_marginBottom="8dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etLivingCosts"
                 android:layout_width="match_parent"
@@ -77,12 +249,104 @@
                 android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- DEGREE TYPE SECTION -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎓 Degree Type(s)"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1A237E"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select all that apply (e.g., MEXT offers both Masters &amp; PhD)"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Multiple Degree Selection -->
+        <CheckBox
+            android:id="@+id/cbDegreeMasters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Masters"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDegreePhD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PhD"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDegreeUndergraduate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Undergraduate"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDegreePostdoc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Postdoc"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Language Requirement -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Language Requirement"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"/>
+        <Spinner
+            android:id="@+id/spinnerLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Application Reach Type -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Application Method"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+        <Spinner
+            android:id="@+id/spinnerReachType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Requirements -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📄 Requirements &amp; Documents"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1A237E"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="12dp"/>
+
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Requirements"
+            android:hint="Requirements (detailed)"
             android:layout_marginBottom="8dp">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etRequirements"
                 android:layout_width="match_parent"
@@ -92,12 +356,130 @@
                 android:gravity="top"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Auto-detect Button -->
+        <Button
+            android:id="@+id/btnAutoDetect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🔍 Auto-Detect Documents"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#1976D2"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Document Checkboxes -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check documents you have PREPARED:"
+            android:textSize="12sp"
+            android:textColor="#757575"
+            android:layout_marginBottom="8dp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocSOP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Statement of Purpose (SOP)"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocLOR"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Letter of Recommendation (LOR)"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocMotivation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Motivation Letter"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocResearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Research Proposal"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocCV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CV / Resume"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocTranscripts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Transcripts / Academic Records"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocDegree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Degree Certificate / Bachelor's Certificate"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Language Test (IELTS/TOEFL/MOI)"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocPassport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Passport Copy / ID Proof"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocStudyPlan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Study Plan / Academic Plan"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocReferences"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reference Letters / Academic References"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocWorkExp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Work Experience Proof"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocPortfolio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Portfolio / Work Samples"
+            android:textSize="14sp"/>
+
+        <CheckBox
+            android:id="@+id/cbDocMedical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medical Certificate / Health Insurance"
+            android:textSize="14sp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Application Link -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Application Link"
+            android:hint="Application Link / Website"
             android:layout_marginBottom="8dp">
-
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etApplicationLink"
                 android:layout_width="match_parent"
@@ -105,34 +487,48 @@
                 android:inputType="textUri"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Personal Notes -->
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Notes"
-            android:layout_marginBottom="8dp">
-
+            android:hint="Personal Notes"
+            android:layout_marginBottom="16dp">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etNotes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
-                android:minLines="2"
+                android:minLines="3"
                 android:gravity="top"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Application Status"
-            android:textSize="14sp"
-            android:textColor="#757575"
-            android:layout_marginBottom="4dp"/>
-
-        <Spinner
-            android:id="@+id/spinnerStatus"
+        <!-- Action Buttons -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"/>
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:textColor="#757575"
+                android:backgroundTint="#EEEEEE"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#43A047"
+                android:layout_marginStart="8dp"/>
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
